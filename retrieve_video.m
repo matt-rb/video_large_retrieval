@@ -9,6 +9,7 @@ if not(exist('query_keyframes','var'))
 [ bin_mat_q ] = test_itq( video_query_features, itq_rot_mat, pca_mapping );
 bit_changes_q = claculate_bit_changes( bin_mat_q );
 candidate_frames_no_q = choose_candidate(bit_changes_q, min_change);
+%query_keyframes=  [candidate_frames_no_q(:,1), bi2de(not(bin_mat_q(candidate_frames_no_q(:,1),:)))];
 query_keyframes=  [candidate_frames_no_q(:,1), bi2de(bin_mat_q(candidate_frames_no_q(:,1),:))];
 end
 

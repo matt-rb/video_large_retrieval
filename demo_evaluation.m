@@ -1,5 +1,5 @@
 
-
+%%--- HI
 %------------------ initialization --------------------------------------
 
 clear all;
@@ -160,7 +160,7 @@ for test_index=1:size(annotation_test,1)
     
 end
 for i=1:8
-    for pers=1:8
+    for pers=1:20
         sum_table.(strcat('Percision',num2str(pers)))(i) = sum_table.(strcat('Percision',num2str(pers)))(i)/sum_table.Count(i);
         sum_table.(strcat('Recall',num2str(pers)))(i) = sum_table.(strcat('Recall',num2str(pers)))(i)/sum_table.Count(i);
     end

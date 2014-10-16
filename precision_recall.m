@@ -12,7 +12,7 @@ function [ precision, recall, max_cat ] = precision_recall( ranked_list, top_no,
     cats2= temp(:,4);
     grp_cats = grpstats(cell2table(cats),'cats');
     grp_cats2 = grpstats(cell2table(cats2),'cats2');
-    
+
     for i=1:size(grp_cats2,1)
         idx_cat = strmatch(grp_cats2.cats2(i),grp_cats.cats,'exact');
         if idx_cat >0

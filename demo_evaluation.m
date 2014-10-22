@@ -8,12 +8,12 @@ min_change = 0;
 video_no = 478;
 image_dir = 'data/frames/';
 itq_data_root = 'features_caffe/';
-train_data_file_name = strcat(itq_data_root,'train_out/itq_train_data_10bit_478caffe.mat');
-annotation_file_name = strcat('annotation_my_more.mat');
+train_data_file_name = strcat(itq_data_root,'train_out/itq_train_data_10bit_478caffe_H.mat');
+annotation_file_name = strcat('annotation_my.mat');
 load(train_data_file_name);
 load(annotation_file_name);
-load('features_caffe/dataset_frame_table_temp.mat');
-load('features_caffe/dataset_hash_table_temp.mat');
+load('features_caffe/dataset_frame_table2.mat');
+load('features_caffe/dataset_hash_table2.mat');
 
 
 
@@ -84,7 +84,7 @@ for test_index=1:size(annotation_test,1)
     [ frame_indexes, query_keyframes_org ] = retrieve_video( video_query_features, pca_mapping, itq_rot_mat, dataset_hash_table, min_change ); 
     [ per_video ] = sort_retrival_by_video_index( frame_indexes,dataset_frame_table,query_no,mapped  );
     history_frames=query_keyframes_org;
-    while size(per_video,1)<405
+    while size(per_video,1)<400
         %if size(query_keyframes_org,1)>100
             tt= randi([1 size(query_keyframes_org,1)],1,ceil(size(query_keyframes_org,1)/3));
             query_keyframes = query_keyframes_org(tt,:);

@@ -26,11 +26,11 @@ function [ per_video ] = sort_retrival_by_video_index( frame_indexes,dataset_fra
                     per_video(video_ret_index,2) = {[cell2mat(per_video(video_ret_index,2));...
                                               retrive_frames(find(retrive_frames(:,1)==unique_retrive_frames(frm_index),1),2)]};
                 else
-                    append = [ unique_retrive_frames(frm_index), {retrive_frames(find(retrive_frames(:,1)==unique_retrive_frames(frm_index),1),2)},act1,act2];
+                    append = [ unique_retrive_frames(frm_index), {retrive_frames(find(retrive_frames(:,1)==unique_retrive_frames(frm_index),1),2)},act1,act2,0];
                     per_video =  [per_video; append ];
                 end;   
             else
-                append = [ unique_retrive_frames(frm_index), {retrive_frames(find(retrive_frames(:,1)==unique_retrive_frames(frm_index),1),2)},act1,act2];
+                append = [ unique_retrive_frames(frm_index), {retrive_frames(find(retrive_frames(:,1)==unique_retrive_frames(frm_index),1),2)},act1,act2,0];
                 per_video =  [per_video; append ];
             end
         end

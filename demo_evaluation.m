@@ -9,11 +9,11 @@ video_no = 478;
 image_dir = 'data/frames/';
 itq_data_root = 'features_caffe/';
 train_data_file_name = strcat(itq_data_root,'train_out/itq_train_data_10bit_478caffe_H.mat');
-annotation_file_name = strcat('annotation_my.mat');
+annotation_file_name = strcat('annotation_my_more.mat');
 load(train_data_file_name);
 load(annotation_file_name);
-load('features_caffe/dataset_frame_table2.mat');
-load('features_caffe/dataset_hash_table2.mat');
+load('features_caffe/dataset_frame_table_temp.mat');
+load('features_caffe/dataset_hash_table_temp.mat');
 
 
 
@@ -81,39 +81,18 @@ for test_index=1:size(annotation_test,1)
     load(query_features_file);
     video_query_features = feats;
     fprintf ('%d of %d - Video No : %d \t Category1: %s  \t Category2: %s \n', test_index,size(annotation_test,1), query_no, char(mapped.Act1(inx)),char(mapped.Act2(inx)));
-    [ frame_indexes, query_keyframes_org ] = retrieve_video( video_query_features, pca_mapping, itq_rot_mat, dataset_hash_table, min_change ); 
-    [ per_video ] = sort_retrival_by_video_index( frame_indexes,dataset_frame_table,query_no,mapped  );
-    history_frames=query_keyframes_org;
-    while size(per_video,1)<400
-        %if size(query_keyframes_org,1)>100
-            tt= randi([1 size(query_keyframes_org,1)],1,ceil(size(query_keyframes_org,1)/3));
-            query_keyframes = query_keyframes_org(tt,:);
-        %else
-        %    query_keyframes = query_keyframes_org;
-        %end
-        frm_idx =1;
-        while frm_idx<=size(query_keyframes,1)
-            bin_val = de2bi(query_keyframes(frm_idx,2),size(pca_mapping,2));
-            while size(find(history_frames(:,2)==bi2de(bin_val)),1)>0
-                candidate_bit = randi([1 size(pca_mapping,2)]);
-                bin_val(candidate_bit) = not(bin_val(candidate_bit));
-            end        
-            query_keyframes(frm_idx,2) = bi2de(bin_val);
-            history_frames = [history_frames; query_keyframes(frm_idx,:)];
-            frm_idx=frm_idx+1;
+    [ per_video_motion ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_motion, min_change, dataset_motion_table, mapped, query_no, true );
+    [ per_video ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_table, min_change, dataset_frame_table, mapped, query_no, false );
+    
+    for p_idx=1:size(per_video,1)
+        m_idx = find(cell2mat(per_video_motion(:,1))==cell2mat(per_video(p_idx,1)));
+        if size(m_idx,1)>0
+            per_video(p_idx,5) = num2cell(cellfun(@plus,per_video(p_idx,5),per_video_motion(m_idx,5)));
         end
-        [ frame_indexes, query_keyframes ] = retrieve_video( video_query_features, pca_mapping, itq_rot_mat, dataset_hash_table, min_change,query_keyframes ); 
-        [ per_video ] = sort_retrival_by_video_index( frame_indexes,dataset_frame_table,query_no,mapped, per_video  );
     end
     
-    for i=1:size(per_video,1)
-        input_vector = cell2mat(per_video(i,2));
-        [~, idxs, ~] = unique(input_vector);
-        per_video(i,2) = {input_vector(sort(idxs))};
-    end
-    [dummy, Index] = sort(cellfun('size', per_video, 1), 'descend');
-    per_video = per_video(Index(:,2),:);
-    
+    [dummy, Index] = sort(cell2mat(per_video(:,5)), 'descend');
+    per_video = per_video(Index(:,1),:);
     
     %--------- Buid Summary Table of Categories " Act1 | GroupCount "
     grp_cats = grpstats(annotation_train(:,3),'Act1');

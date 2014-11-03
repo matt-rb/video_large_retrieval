@@ -19,8 +19,8 @@ while frm_no<nFrames
     frm_no = frm_no+1;
 end
 
-if size(candidate_frames_no,1)<5
-    needed_frm = 5-size(candidate_frames_no,1);
+if size(candidate_frames_no,1)<10
+    needed_frm = 10-size(candidate_frames_no,1);
     frm_dist = ceil((nFrames-5)/needed_frm);
     for i=1:needed_frm
         idx= frm_dist*i;

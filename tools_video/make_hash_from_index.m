@@ -6,6 +6,10 @@ function [ hash_table ] = make_hash_from_index( hash_index , content_table )
 %       [ [idx_code] , [index of idx_codes in content_table] , [binaries] ]
 %       -content_table : table of "key_frames" or "motion_vectors".
 %       [ [video_no] , [frame_index] , [decimal_value] , [binaries] ]
+%
+%   output:
+%       -hash_table : videos hash tables
+%       [ [hash_code] , [video_nos, frame_nos] , [binaries] ]
 
 
 fprintf(1,'Combine Hash index and content tables...\nItems : %d Combined Items No. :  ',size(hash_index,1));

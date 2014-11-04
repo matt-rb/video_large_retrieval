@@ -9,7 +9,7 @@ video_no = 478;
 image_dir = 'data/frames/';
 itq_data_root = 'features_caffe/';
 train_data_file_name = strcat(itq_data_root,'train_out/itq_train_data_10bit_478caffe_H.mat');
-annotation_file_name = strcat('annotation_my_more.mat');
+annotation_file_name = strcat('annotation_my_more_cell.mat');
 load(train_data_file_name);
 load(annotation_file_name);
 load('features_caffe/dataset_frame_table_temp.mat');
@@ -20,6 +20,7 @@ load('features_caffe/dataset_hash_table_temp.mat');
 
 
 %------------------ TEST PLAN --------------------------------------------
+% Build test plan overall table structure
  cell_cat = {'Category','Percision1','Percision2','Percision3','Percision4','Percision5','Percision6','Percision7','Percision8','Percision9','Percision10'...
                         ,'Percision11','Percision12','Percision13','Percision14','Percision15','Percision16','Percision17','Percision18','Percision19','Percision20'...
                         ,'Percision21','Percision22','Percision23','Percision24','Percision25','Percision26','Percision27','Percision28','Percision29','Percision30'...
@@ -71,18 +72,21 @@ load('features_caffe/dataset_hash_table_temp.mat');
 
     sum_table = cell2table(cell_cat(2:end,:));
     sum_table.Properties.VariableNames = cell_cat(1,:);
-    
+
+%---------- START Evaluation ---------------------------------------------
+
 for test_index=1:size(annotation_test,1)
-    %if strmatch(annotation_test.videoName{test_index}, mapped.videoName, 'exact')>0
-    inx= strmatch(annotation_test.videoName{test_index}, mapped.videoName, 'exact');
-    query_no = mapped.videoNo(inx);
+    inx= strmatch(annotation_test(test_index,1), mapped(:,2), 'exact');
+    query_no = mapped{inx,1};
+    start_frm = str2double(mapped{inx,5} (1:strfind(mapped{inx,5},'-')-1));
+    end_frm = str2double(mapped{inx,5} (strfind(mapped{inx,5},'-')+1:end));
     query_features_file = strcat(itq_data_root,'videos/video',num2str(query_no),'_data.mat');
     query_dir = strcat(image_dir,'frames',num2str(query_no));
     load(query_features_file);
-    video_query_features = feats;
-    fprintf ('%d of %d - Video No : %d \t Category1: %s  \t Category2: %s \n', test_index,size(annotation_test,1), query_no, char(mapped.Act1(inx)),char(mapped.Act2(inx)));
-    [ per_video_motion ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_motion, min_change, dataset_motion_table, mapped, query_no, true );
+    video_query_features = feats(start_frm:end_frm,:);
+    fprintf ('%d of %d - Video No : %d \t Category1: %s  \t Category2: %s \n', test_index,size(annotation_test,1), query_no, char(mapped{inx,3}),char(mapped{inx,4}));
     [ per_video ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_table, min_change, dataset_frame_table, mapped, query_no, false );
+    [ per_video_motion ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_motion, min_change, dataset_motion_table, mapped, query_no, true );
     
     for p_idx=1:size(per_video,1)
         m_idx = find(cell2mat(per_video_motion(:,1))==cell2mat(per_video(p_idx,1)));

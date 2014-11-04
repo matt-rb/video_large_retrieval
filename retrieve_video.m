@@ -2,13 +2,12 @@ function [ frame_indexes, query_keyframes ] = retrieve_video( video_query_featur
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
-% Extract Query Binary vectors and key_frames
-frame_indexes = [];
 
+
+% Extract Query Binary vectors and key_frames
 if not(exist('query_keyframes','var'))
     [ bin_mat_q ] = test_itq( video_query_features, itq_rot_mat, pca_mapping );
-    bit_changes_q = claculate_bit_changes( bin_mat_q );
-    candidate_frames_no_q = choose_candidate(bit_changes_q, min_change);
+    candidate_frames_no_q = choose_keyframes( bin_mat_q, min_change );
     if exist('retrieve_by_motion','var') && retrieve_by_motion
         [ motion_vectors ] = calculate_motion_vectors( video_query_features, candidate_frames_no_q );
         [ motions_bin ] = test_itq( motion_vectors, itq_rot_mat, pca_mapping );
@@ -18,9 +17,8 @@ if not(exist('query_keyframes','var'))
     end
 end
 
-for i=1:size(query_keyframes,1)
-    frame_indexes = [frame_indexes ; [ query_keyframes(i,1) ,hash_table(query_keyframes(i,2)+1,2)]];
-end
-
+% Get correspond video key_frames from dataset with each key_frame in the
+% query using hash_table data
+frame_indexes = [num2cell(query_keyframes(:,1)), hash_table(query_keyframes(:,2)+1,2)];
 end
 

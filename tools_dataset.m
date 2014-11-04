@@ -7,13 +7,14 @@
 %     end
 % end
 
-% for i=1:size(annotation_test,1)
-%     if strmatch(annotation_test.videoName{i}, mapped.videoName, 'exact')>0
-%         inx= strmatch(annotation_test.videoName{i}, mapped.videoName, 'exact');
-%         mapped.Act1{inx(1)}=annotation_test.Act1{i};
-%         mapped.Act2{inx(1)}=annotation_test.Act2{i};
-%     end
-% end
+for i=1:size(trainclean,1)
+    if strmatch(trainclean.videoName{i}, mapped(:,2), 'exact')>0
+        inx= strmatch(trainclean.videoName{i}, mapped(:,2), 'exact');
+        mapped{inx,3}=trainclean.Act1{i};
+        mapped{inx,4}=trainclean.Act2{i};
+        mapped{inx,5}=trainclean.frames{i};
+    end
+end
 
 
 %------------------------- Buildup Mapping Table -------------------------
@@ -41,12 +42,13 @@
 %         
 % end
 
+
 %------------- collect data and Make dataset train ready ------------------
-train_video_index = zeros(size(annotation_train,1), 1);
-itq_data_root = 'features_caffe/';
-
-for i=1:size(annotation_train,1)
-    train_video_index(i)=mapped.videoNo(strmatch(annotation_train.videoName{i}, mapped.videoName));
-end
-
-[ temp_features ] = join_fetures( itq_data_root, train_video_index );
+% train_video_index = zeros(size(annotation_train,1), 1);
+% itq_data_root = 'features_caffe/';
+% 
+% for i=1:size(annotation_train,1)
+%     train_video_index(i)=mapped.videoNo(strmatch(annotation_train.videoName{i}, mapped.videoName));
+% end
+% 
+% [ temp_features ] = join_fetures( itq_data_root, train_video_index );

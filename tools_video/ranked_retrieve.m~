@@ -15,7 +15,6 @@ function [ per_video ] = ranked_retrieve( video_query_features, pca_mapping,itq_
 %       -retrieve_by_motion : to retrieve based on motion_vectors set
 %           retrieve_by_motion=true
 %       -make_unique : cosider unique frames in each retrieved video sample.
-%                      (Default = ture)
 %
 %   output:
 %       -per_video: ranked list of videos in dataset, according to
@@ -23,7 +22,7 @@ function [ per_video ] = ranked_retrieve( video_query_features, pca_mapping,itq_
 %       key_frames/motion_vectors and datasets video
 
     [ frame_indexes, query_keyframes_org ] = retrieve_video( video_query_features, pca_mapping, itq_rot_mat, hash_table, min_change,retrieve_by_motion ); 
-    [ per_video ] = retrival_by_video_index( frame_indexes,mapped  );
+    [ per_video ] = sort_retrival_by_video_index( frame_indexes,mapped  );
     
     history_frames=query_keyframes_org;
     while size(per_video,1)<max_return
@@ -42,15 +41,20 @@ function [ per_video ] = ranked_retrieve( video_query_features, pca_mapping,itq_
             frm_idx=frm_idx+1;
         end
         [ frame_indexes, query_keyframes ] = retrieve_video( video_query_features, pca_mapping, itq_rot_mat, hash_table, min_change,retrieve_by_motion, query_keyframes ); 
-        [ per_video ] = retrival_by_video_index( frame_indexes,mapped, per_video  );
+        [ per_video ] = sort_retrival_by_video_index( frame_indexes,mapped, per_video  );
     end
     
     if not(exist('make_unique','var'))
         make_unique = true;
     end
     
-    [ per_video , ranked_list ] = sort_cells_by_col( per_video, 2 ,make_unique); 
-    per_video(:,5)=num2cell(ranked_list);
+    [ per_video ] = sort_cells_by_col( per_video, 2 ,make_unique);
     
+    res_count= size(per_video,1);
+    ranked = zeros(res_count,1);
+    for i=1:size(ranked,1)
+        ranked(i) = 1-(i/res_count);
+    end
+    per_video(:,5)=num2cell(ranked);
 end
 

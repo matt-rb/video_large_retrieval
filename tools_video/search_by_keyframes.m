@@ -4,7 +4,7 @@ function [ frm_list ] = search_by_keyframes( query_data, database_keyframes, ima
 frm_list = [];
 for i=1:size(query_data,1)
     
-    new_data =  find (bi2de(database_keyframes(:,2:end))==bi2de(query_data(i,2:end)));
+    new_data =  find (bi2de(database_keyframes(:,2:end))==bi2de(query_data(i,2:end),'left-msb'));
     
     if size(new_data)>0
         new_data = database_keyframes(new_data,:);

@@ -52,3 +52,7 @@ end
 % end
 % 
 % [ temp_features ] = join_fetures( itq_data_root, train_video_index );
+
+
+double(sum_table(:,2:41))';
+double(sum_table(:,42:81))';

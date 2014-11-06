@@ -16,7 +16,7 @@ dataset_hash_table = cell(size(index_values,1),3);
 fprintf(1,'Buildup Hash Table...\nCategories : %d Indexing Category No :  ',size(index_values,1));
 for i=1:size(index_values,1) 
     print_counter( i );
-    temp_row = [index_values(i), {find(dataset_frame_table(:,3)==index_values(i))}, de2bi(index_values(i),binary_size)];
+    temp_row = [index_values(i), {find(dataset_frame_table(:,3)==index_values(i))}, de2bi(index_values(i),binary_size,'left-msb')];
     dataset_hash_table(i,:) = temp_row;
 end
 fprintf('\n');

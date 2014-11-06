@@ -1,4 +1,4 @@
-function [ per_video ] = sort_retrival_by_video_index( frame_indexes,mapped, per_video  )
+function [ per_video ] = retrival_by_video_index( frame_indexes,mapped, per_video  )
 % Get retrived video frames and rearrange from frame_based to video_based
 % list. each rows shown a video index and its common frames with the query
 % video
@@ -24,15 +24,21 @@ function [ per_video ] = sort_retrival_by_video_index( frame_indexes,mapped, per
         retrive_frames = cell2mat(frame_indexes(i,2));
         unique_retrive_frames = unique(retrive_frames(:,1));
         for frm_index=1:size(unique_retrive_frames,1)
-            % find lables of video
-             rows = cell2mat(mapped(:,1))==unique_retrive_frames(frm_index);
-             actions = mapped(rows,3:4);
-             act1 = actions{1};
-             if size(actions{2},1)<1
-                 act2 = '_';
-             else
-                act2 = actions{2};
-             end;
+            if not(exist('mapped','var'))
+                act1 = '_';
+                act2 = '_';
+            else
+                % find lables of video
+                rows = cell2mat(mapped(:,1))==unique_retrive_frames(frm_index);
+                actions = mapped(rows,3:4);
+                act1 = actions{1};
+                if size(actions{2},1)<1
+                    act2 = '_';
+                else
+                    act2 = actions{2};
+                end;
+            end
+            
 
             if size(per_video,1)>0
                 video_ret_index = find(cell2mat(per_video(:,1))==unique_retrive_frames(frm_index));

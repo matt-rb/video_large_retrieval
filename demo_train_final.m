@@ -1,41 +1,51 @@
 %------ clear all data and set global variables
 clear all;
-frame_name = 'frm';
-min_change = 1;
+pca_size = 10;
+
+
+collect_dataset = false;
+save_mode = false;
 
 %------ Trained ITQ Data (Include itq_bin_mat , itq_rot_mat , n_iter ,
-%                                 pca_mapping , pca_size , vector_size )
+%                                 pca_mapping , pca_size , vector_size, mean_data )
 
 
 %------ COLECT DATA ------------------------------------------------------
-itq_data_root = 'features_caffe/videos/';
-annotation_file = 'annotation_my.mat';
+features_data_root = 'features_caffe/';
+annotation_file = 'annotation_my_more_cell.mat';
 train_feature_file = 'features_caffe/features_trainset.mat';
-
+train_feature_normal_file = 'features_caffe/features_trainset_normalized.mat';
 load(annotation_file);
-% train_video_index = zeros(size(annotation_train,1), 1);
-% 
-% for i=1:size(annotation_train,1)
-%     train_video_index(i)=mapped.videoNo(strmatch(annotation_train.videoName{i}, mapped.videoName));
-% end
-% 
-% [ temp_features ] = join_fetures( itq_data_root, train_video_index );
-% save(train_feature_file, 'temp_features' );
+train_samples_no=size(annotation_train,1);
+train_video_index = zeros(train_samples_no, 1);
 
+if collect_dataset
+ 
+    for i=1:train_samples_no
+        train_video_index(i)=cell2mat(mapped((strmatch(annotation_train(i,1), mapped(:,2))),1));
+    end
+ 
+    [ train_features ] = join_fetures( strcat(features_data_root,'videos/'), train_video_index );
+    if save_mode
+        save(train_feature_file, 'train_features' ,'-v7.3' );
+    end
 
+    [ train_features, mean_data  ] = normalize_features( train_features );
+    if save_mode
+        save(train_feature_normal_file, 'train_features' ,'-v7.3' );
+    end
+
+end
 
 %------------ TRAIN ITQ Data ---------------------------------------------------
-train_data_file_name = strcat(itq_data_root,'train/itq_train_data_10bit_402caffe.mat');
+train_data_file_name = strcat(features_data_root,'train_out/itq_train_data_',num2str(pca_size),'bit_',num2str(train_samples_no),'caffe.mat');
 
 %------ For train Data uncomment the following code
 load (train_feature_file);
-vector_size = 4096;
-pca_size = 10;
+
 n_iter = 50;
-load_from_file = true;
-train_features_file='';
-[ itq_bin_mat,itq_rot_mat,pca_mapping ] = train_itq( pca_size, n_iter, temp_features );
-save (train_data_file_name, 'itq_bin_mat', 'itq_rot_mat', 'n_iter', 'pca_mapping', 'pca_size', 'vector_size');
+[ itq_bin_mat,itq_rot_mat,pca_mapping ] = train_itq( pca_size, n_iter, train_features );
+save (train_data_file_name, 'itq_rot_mat', 'pca_mapping', 'pca_size', 'mean_data');
 
 %------ For load a saved train Data file
 load(train_data_file_name);

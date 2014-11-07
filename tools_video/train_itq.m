@@ -3,8 +3,8 @@ function [ itq_bin_mat,itq_rot_mat,pca_mapping ] = train_itq( pca_size, n_iter, 
 %   Detailed explanation goes here
 
     fprintf('Normalize Data...\n');
-    temp_features=bsxfun(@minus,temp_features,mean(temp_features));
-    temp_features=bsxfun(@rdivide,temp_features,sqrt(sum(temp_features.^2,2)));
+    [temp_features, ~] = normalize_features( temp_features );
+
     %----- PCA ---------
     fprintf('Computing Cov PCA...\n');
     Cov=temp_features'*temp_features;

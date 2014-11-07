@@ -6,7 +6,7 @@ clear all;
 min_change = 0;
 sub_video_kf = 10;
 itq_data_root = 'features_caffe/';
-train_data_file_name = strcat(itq_data_root,'train_out/itq_train_data_10bit_478caffe_H.mat');
+train_data_file_name = strcat(itq_data_root,'train_out/itq_train_data_10bit_411caffe.mat');
 annotation_file_name = strcat('annotation_my_more_cell.mat');
 load(train_data_file_name);
 load(annotation_file_name);

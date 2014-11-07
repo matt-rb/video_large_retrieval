@@ -33,7 +33,7 @@ function [ motion_vector ] = motion_features( feats )
 %       motion_vector : sum of diffrences represented as motion_flow_vector
 
 motion_vector = feats(1:end-1,:) - feats(2:end,:);
-motion_vector = sum(motion_vector,1);
+motion_vector = sum(motion_vector,1)/size(motion_vector,1);
 
 end
 

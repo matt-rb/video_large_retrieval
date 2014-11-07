@@ -1,4 +1,4 @@
-function [ dataset_key_frame_table,dataset_motion_table ] = make_dataset_frame_table( dataset_root, pca_mapping, itq_rot_mat, min_change, train_set, mapped )
+function [ dataset_key_frame_table,dataset_motion_table ] = make_dataset_frame_table( dataset_root, pca_mapping, itq_rot_mat, min_change, train_set, mapped, mean_data )
 % Compute key_frames and motions between key_frames from videos in dataset,
 % according to the extracted frames feature vectors from each video.
 %
@@ -49,6 +49,7 @@ for i=1 : video_no
     
     % Load video feature_vecors file.
     load(strcat(dataset_root,'video',num2str(video_index),'_data.mat'));
+    [ feats , ~ ] = normalize_features( feats, mean_data );
     
     % Extract binary Codes of feature vectors for each frame.
     [ itq_bin_mat ] = test_itq( feats, itq_rot_mat, pca_mapping );
@@ -57,6 +58,7 @@ for i=1 : video_no
     % Calculate motions between two consequtive key_frames (Using original
     % feature vectors not binaries)
     [ motion_vectors ] = calculate_motion_vectors( feats, candidate_frames_no );
+    [ motion_vectors , ~ ] = normalize_features( motion_vectors );
     % Extract motion vectors binaries
     [ motions_bin ] = test_itq( motion_vectors, itq_rot_mat, pca_mapping );
     

@@ -18,7 +18,7 @@ for video_idx=1:size(mapped,1)
     [ feats, ~  ] = normalize_features( feats, mean_data );
     video_query_features = feats;
     fprintf ('%d of %d - Video No : %d  \n', video_idx,size(mapped,1), query_no);
-    [ bin_mat ] = test_itq( video_query_features, itq_rot_mat, pca_mapping );
+    [ bin_mat ] = test_itq( video_query_features, itq_rot_mat, pca_mapping, false );
     candidate_frames_no = choose_keyframes(bin_mat, min_change);
     [ motion_vectors ] = calculate_motion_vectors( feats, candidate_frames_no );
     [ motion_vectors, ~  ] = normalize_features( motion_vectors );

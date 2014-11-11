@@ -1,4 +1,4 @@
-function [ itq_bin_mat ] = test_itq( data_features, itq_rot_mat, pca_mapping, mean_data )
+function [ itq_bin_mat ] = test_itq( data_features, itq_rot_mat, pca_mapping, normalize_data, mean_data)
 % Mapp feature vectors to itq binreies
 %
 %   input:
@@ -9,14 +9,20 @@ function [ itq_bin_mat ] = test_itq( data_features, itq_rot_mat, pca_mapping, me
 %   output:
 %       -itq_bin_mat: feature vectors mapped binaries.
 
-if (nargin<4) || isempty(mean_data)
+if not(exist('mean_data','var'))
   mean_data = mean(data_features);
 end
 
-data_features=bsxfun(@minus,data_features,mean_data);
-norm_temp=bsxfun(@rdivide,data_features,sqrt(sum(data_features.^2,2)));
+if not(exist('normalized_data','var'))
+    normalize_data= true;
+end
 
-projected_pca = norm_temp * pca_mapping;
+if normalize_data
+    data_features=bsxfun(@minus,data_features,mean_data);
+    data_features=bsxfun(@rdivide,data_features,sqrt(sum(data_features.^2,2)));
+end
+
+projected_pca = data_features * pca_mapping;
 itq_bin_mat = sign(max(projected_pca * itq_rot_mat,0));
 
 end

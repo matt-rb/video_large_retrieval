@@ -52,7 +52,7 @@ for i=1 : video_no
     [ feats , ~ ] = normalize_features( feats, mean_data );
     
     % Extract binary Codes of feature vectors for each frame.
-    [ itq_bin_mat ] = test_itq( feats, itq_rot_mat, pca_mapping );
+    [ itq_bin_mat ] = test_itq( feats, itq_rot_mat, pca_mapping, false );
     % Calculate Key_frames
     candidate_frames_no = choose_keyframes(itq_bin_mat, min_change);
     % Calculate motions between two consequtive key_frames (Using original
@@ -60,7 +60,7 @@ for i=1 : video_no
     [ motion_vectors ] = calculate_motion_vectors( feats, candidate_frames_no );
     [ motion_vectors , ~ ] = normalize_features( motion_vectors );
     % Extract motion vectors binaries
-    [ motions_bin ] = test_itq( motion_vectors, itq_rot_mat, pca_mapping );
+    [ motions_bin ] = test_itq( motion_vectors, itq_rot_mat, pca_mapping,false );
     
     % Collect video key_frames and motion_vectors
     selected_motion_vectors = [ones(size(candidate_frames_no,1),1)*video_index,...

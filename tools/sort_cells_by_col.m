@@ -40,7 +40,7 @@ end
 cell_data = cell_data(Index(:,1),:);
 
 res_count= size(cell_data,1);
-ranked_list = (0:res_count)'/res_count;
+ranked_list = (1:res_count)'/res_count;
 ranked_list = sort(ranked_list,'descend');
 end
 

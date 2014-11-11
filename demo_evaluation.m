@@ -2,8 +2,8 @@
 
 clear all;
 load_essentials;
-load('features_caffe/dataset_frame_table_temp.mat');
-load('features_caffe/dataset_hash_table_temp.mat');
+%load('features_caffe/dataset_frame_table_temp.mat');
+load(dataset_hash_table_file);
 
 %% ------------------ TEST PLAN --------------------------------------------
 % Build test plan overall table structure
@@ -33,8 +33,7 @@ for test_index=1:size(annotation_test,1)
     % fetch video test sample index and feature_vector file
     inx= strmatch(annotation_test(test_index,1), mapped(:,2), 'exact');
     query_no = mapped{inx,1};
-    query_features_file = strcat(itq_data_root,'videos/video',num2str(query_no),'_data.mat');
-    query_dir = strcat(image_dir,'frames',num2str(query_no));
+    query_features_file = strcat(features_data_root,'videos/video',num2str(query_no),'_data.mat');
     load(query_features_file);
     % Select action start_frame and end_frame from mapped table
     start_frm = str2double(mapped{inx,5} (1:strfind(mapped{inx,5},'-')-1));
@@ -43,7 +42,8 @@ for test_index=1:size(annotation_test,1)
         end_frm = size(feats,1);
     end
     video_query_features = feats(start_frm:end_frm,:);
-    
+    [video_query_features, ~] = normalize_features( video_query_features );
+
     % Retrieve query video and correspond motion_vectors
     fprintf ('%d of %d - Video No : %d \t Category1: %s  \t Category2: %s \n', test_index,size(annotation_test,1), query_no, char(mapped{inx,3}),char(mapped{inx,4}));
     max_return = 400;

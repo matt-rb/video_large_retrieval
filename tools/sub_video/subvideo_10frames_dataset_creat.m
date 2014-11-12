@@ -21,7 +21,6 @@ for video_idx=1:size(mapped,1)
     [ bin_mat ] = test_itq( video_query_features, itq_rot_mat, pca_mapping, false );
     candidate_frames_no = choose_keyframes(bin_mat, min_change);
     [ motion_vectors ] = calculate_motion_vectors( feats, candidate_frames_no );
-    [ motion_vectors, ~  ] = normalize_features( motion_vectors );
     sub_vid = fix(size(candidate_frames_no,1)/sub_video_kf);
     
     for i=1:sub_vid

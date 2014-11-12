@@ -58,9 +58,9 @@ for test_index=1:size(sub_video_test_set_flat,1)
     
     query_keyframes =  [(1:vector_size)', bi2de(frame_bin,'left-msb')];
     [ frame_indexes, query_keyframes ] = retrieve_video( frame_feats, pca_mapping, itq_rot_mat, hash_sub_frame, min_change,false, query_keyframes); 
-    [ per_video ] = sort_retrival_by_video_index( frame_indexes );
+    [ per_video ] = retrival_by_video_index( frame_indexes );
     
-    [ per_video , ranked_list ] = sort_cells_by_col( per_video, 2, fales );
+    [ per_video , ranked_list ] = sort_cells_by_col( per_video, 2, false );
     per_video(:,5)=num2cell(ranked_list);
     
    

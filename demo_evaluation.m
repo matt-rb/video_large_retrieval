@@ -3,6 +3,7 @@
 clear all;
 load_essentials;
 %load('features_caffe/dataset_frame_table_temp.mat');
+min_ret_results = 400;
 load(dataset_hash_table_file);
 
 %% ------------------ TEST PLAN --------------------------------------------
@@ -46,9 +47,9 @@ for test_index=1:size(annotation_test,1)
 
     % Retrieve query video and correspond motion_vectors
     fprintf ('%d of %d - Video No : %d \t Category1: %s  \t Category2: %s \n', test_index,size(annotation_test,1), query_no, char(mapped{inx,3}),char(mapped{inx,4}));
-    max_return = 400;
-    [ per_video ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_frame, min_change, mapped, max_return,  false );
-    [ per_video_motion ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_motion, min_change, mapped, max_return, true );
+    min_return = min_ret_results;
+    [ per_video ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_frame, min_change, mapped, min_return,  false );
+    [ per_video_motion ] = ranked_retrieve( video_query_features, pca_mapping,itq_rot_mat, dataset_hash_motion, min_change, mapped, min_return, true );
     
     for p_idx=1:size(per_video,1)
     %% Calculate sum of rankes from motions and frames vector
@@ -82,7 +83,7 @@ for test_index=1:size(annotation_test,1)
         sum_table.Count(idx_cat2) = sum_table.Count(idx_cat2) + 1;
     end
     
-    for pers=1:40
+    for pers=1:(min_ret_results/10)
         if pers*10 > size(per_video,1)
             continue;
         end

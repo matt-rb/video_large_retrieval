@@ -22,7 +22,11 @@ function [ per_video ] = retrival_by_video_index( frame_indexes,mapped, per_vide
     for i=1:size(frame_indexes,1)
         
         retrive_frames = cell2mat(frame_indexes(i,2));
-        unique_retrive_frames = unique(retrive_frames(:,1));
+        if (size(retrive_frames,1)>0)
+            unique_retrive_frames = unique(retrive_frames(:,1));
+        else
+            unique_retrive_frames =[];
+        end
         for frm_index=1:size(unique_retrive_frames,1)
             if not(exist('mapped','var'))
                 act1 = '_';

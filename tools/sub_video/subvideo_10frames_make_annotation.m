@@ -39,4 +39,4 @@ for i=1:size(sub_train_set_index,1)
     sub_video_train_set_flat(i,:)=temp;
 end
 
-save('sub_video_train_data','sub_test_set_index','sub_train_set_index','sub_video_test_set_flat','sub_video_train_set_flat');
+save('sub_video_train_data','sub_test_set_index','sub_train_set_index','sub_video_test_set_flat','sub_video_train_set_flat', '-v7.3');

@@ -28,7 +28,7 @@ for video_idx=1:size(mapped,1)
         end_frm = i*sub_video_kf;
         sub_video_vector = insertrows(feats(candidate_frames_no(start_frm:end_frm,1),:), double(motion_vectors(start_frm:end_frm,:)), (1:sub_video_kf));
         sub_video_vectors = [sub_video_vectors ; sub_video_vector];
-        sub_video_vectors_index = [sub_video_vectors_index ; [sub_video_extracted_idx, query_no] ];
+        sub_video_vectors_index = [sub_video_vectors_index ; [sub_video_extracted_idx, query_no,candidate_frames_no(start_frm,1),candidate_frames_no(end_frm,1)  ] ];
         sub_video_extracted_idx = sub_video_extracted_idx +1;
     end
     

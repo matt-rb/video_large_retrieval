@@ -34,3 +34,5 @@ for video_idx=1:size(mapped,1)
     end
     
 end
+
+save('sub_videos','sub_video_vector','sub_video_vectors_index');

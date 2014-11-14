@@ -1,6 +1,7 @@
 %% -------- Initialize Evaluation of sub_videos ---------------------------
 
 reset=0;
+load_essentials;
 
 if reset
     clear all;
@@ -9,8 +10,8 @@ if reset
     load('sub_video_train_data.mat');
 end
 
-load_data=1;
-motion_seprated_mode=false;
+load_data=0;
+motion_seprated_mode=true;
 
 %% --------------------- Buildup/Load Hash table --------------------------
 if load_data

@@ -1,13 +1,12 @@
-%% ------------------ initialization --------------------------------------
+%% Initialization
 
 clear all;
-load_essentials;
-%load('features_caffe/dataset_frame_table_temp.mat');
-min_ret_results = 400;
-load(dataset_hash_table_file);
+load_essentials;        % essential parameters and variables
+min_ret_results = 400;  % minimum number of retrieval items
+load(dataset_hash_table_file);  % hash-table
 
-%% ------------------ TEST PLAN --------------------------------------------
-% Build test plan overall table structure
+%% Test Plan Table
+% Build overall-test-plan table structure
 test_parameter_cols.Category = 1;
 test_parameter_cols.Percision = 40;
 test_parameter_cols.Recall= 40;
@@ -25,11 +24,13 @@ test_parameter_rows.AVG= 0;
 
    
 
-%% ---------- START Evaluation --------------------------------------------
+%% Evaluation
+% for each test sample, retreive similar videos from dataset, make a ranked
+% list based on frequently of extracted key-frames and motion-vectors.
 for test_index=1:size(annotation_test,1)
 %% Select test samples from dataset 
-%  extract key frames and bianreies and retrieve correspond videos from 
-%  dataset train samples.
+% extract key frames and bianreies and retrieve correspond videos from
+% dataset train samples.
 
     % fetch video test sample index and feature_vector file
     inx= strmatch(annotation_test(test_index,1), mapped(:,2), 'exact');

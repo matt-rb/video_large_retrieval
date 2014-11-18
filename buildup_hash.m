@@ -7,7 +7,7 @@ load_essentials;
 
 %% Collect data and select video key_frames
 [ dataset_frame_table, dataset_motion_table ] = make_dataset_frame_table( dataset_root, pca_mapping, itq_rot_mat, min_change, annotation_train, mapped, mean_data );
-save('features_caffe/dataset_frame_motion_table','dataset_frame_table','dataset_motion_table');
+save(strcat('features_caffe/hash_tables/dataset_frame_motion_table_',num2str(sample_no)),'dataset_frame_table','dataset_motion_table');
 
 %% Generate Hash-tables
 % generating *key-frame hash-table* beside the *motions hash-table* between
